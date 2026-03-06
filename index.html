@@ -2,7 +2,7 @@
 <html lang="id" class="h-full">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <meta name="description" content="Menu online kue & roti tradisional Indonesia. Pesan sekarang via WhatsApp!">
   <title>Hans Bakery - Kue &amp; Roti Indonesia</title>
 
@@ -10,7 +10,7 @@
   <meta property="og:title" content="Hans Bakery - Kue &amp; Roti Tradisional Indonesia">
   <meta property="og:description" content="Menu online kue &amp; roti tradisional Indonesia. Pesan sekarang via WhatsApp!">
   <meta property="og:image" content="https://i.imgur.com/44m3K9Q.jpeg">
-  <meta property="og:url" content="https://www.canva.com">
+  <meta property="og:url" content="">
   <meta property="og:type" content="website">
 
   <!-- Twitter Card Meta Tags -->
@@ -25,8 +25,16 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
   <style>
-    * { box-sizing: border-box; }
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
     html, body { height: 100%; margin: 0; }
+    
+    /* Safe Area Support for notch devices */
+    :root {
+      --safe-area-inset-top: env(safe-area-inset-top, 0px);
+      --safe-area-inset-bottom: env(safe-area-inset-bottom, 0px);
+      --safe-area-inset-left: env(safe-area-inset-left, 0px);
+      --safe-area-inset-right: env(safe-area-inset-right, 0px);
+    }
 
     /* Typography */
     .font-display { font-family: 'Cormorant Garamond', serif; }
@@ -123,6 +131,10 @@
       cursor: not-allowed;
     }
 
+    .btn:active:not(:disabled) {
+      transform: scale(0.96);
+    }
+
     /* Menu Items */
     .menu-item {
       padding: 16px;
@@ -133,9 +145,16 @@
       cursor: pointer;
     }
 
-    .menu-item:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 8px 16px rgba(212, 165, 116, 0.2);
+    @media (hover: hover) {
+      .menu-item:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 16px rgba(212, 165, 116, 0.2);
+        border-color: var(--primary-color);
+      }
+    }
+
+    .menu-item:active {
+      transform: scale(0.98);
       border-color: var(--primary-color);
     }
 
@@ -197,6 +216,7 @@
       border-radius: 8px;
       color: var(--text-primary);
       font-family: 'Montserrat', sans-serif;
+      font-size: 16px; /* Prevents iOS zoom on focus */
     }
 
     .search-input:focus {
@@ -226,29 +246,41 @@
     }
 
     .fab-primary {
-      bottom: 24px;
-      right: 24px;
+      bottom: calc(24px + var(--safe-area-inset-bottom));
+      right: calc(16px + var(--safe-area-inset-right));
       background: var(--success-color);
       box-shadow: 0 4px 12px rgba(37, 211, 102, 0.4);
       z-index: 50;
     }
 
-    .fab-primary:hover {
-      transform: scale(1.1);
-      box-shadow: 0 6px 20px rgba(37, 211, 102, 0.6);
+    @media (hover: hover) {
+      .fab-primary:hover {
+        transform: scale(1.1);
+        box-shadow: 0 6px 20px rgba(37, 211, 102, 0.6);
+      }
+    }
+
+    .fab-primary:active {
+      transform: scale(0.95);
     }
 
     .fab-secondary {
-      bottom: 24px;
-      left: 24px;
+      bottom: calc(24px + var(--safe-area-inset-bottom));
+      left: calc(16px + var(--safe-area-inset-left));
       background: var(--primary-color);
       box-shadow: 0 4px 12px rgba(212, 165, 116, 0.4);
       color: var(--bg-dark);
     }
 
-    .fab-secondary:hover:not(.hidden) {
-      transform: scale(1.1);
-      box-shadow: 0 6px 20px rgba(212, 165, 116, 0.6);
+    @media (hover: hover) {
+      .fab-secondary:hover:not(.hidden) {
+        transform: scale(1.1);
+        box-shadow: 0 6px 20px rgba(212, 165, 116, 0.6);
+      }
+    }
+
+    .fab-secondary:active:not(.hidden) {
+      transform: scale(0.95);
     }
 
     .fab.hidden {
@@ -278,16 +310,30 @@
       left: 0;
       right: 0;
       width: 100%;
-      height: 0;
+      max-height: 0;
       background: var(--bg-dark);
       border-top: 1px solid var(--border-color);
-      overflow-y: auto;
+      border-radius: 16px 16px 0 0;
+      overflow: hidden;
       z-index: 44;
-      transition: height var(--transition-speed) ease;
+      transition: max-height var(--transition-speed) ease;
+      padding-bottom: var(--safe-area-inset-bottom);
     }
 
     .cart-sidebar.open {
-      height: 50%;
+      max-height: 85vh;
+      overflow-y: auto;
+    }
+
+    /* Drag handle indicator */
+    .cart-sidebar::before {
+      content: '';
+      display: block;
+      width: 40px;
+      height: 4px;
+      background: var(--border-color);
+      border-radius: 2px;
+      margin: 8px auto;
     }
 
     .cart-backdrop {
@@ -353,7 +399,9 @@
       border-radius: 4px;
       text-align: center;
       font-family: 'Montserrat', sans-serif;
-      font-size: 12px;
+      font-size: 16px; /* Prevents iOS zoom on focus */
+      -webkit-appearance: none;
+      -moz-appearance: textfield;
     }
 
     .quantity-input:focus {
@@ -441,6 +489,7 @@
       border-radius: 8px;
       color: var(--text-primary);
       font-family: 'Montserrat', sans-serif;
+      font-size: 16px; /* Prevents iOS zoom on focus */
       resize: vertical;
       min-height: 100px;
       margin-bottom: 16px;
@@ -530,8 +579,9 @@
     @media (max-width: 480px) {
       .toast {
         right: 12px;
-        bottom: 90px;
-        max-width: calc(100% - 24px);
+        left: 12px;
+        bottom: calc(90px + var(--safe-area-inset-bottom));
+        max-width: none;
       }
     }
 
@@ -564,6 +614,7 @@
     .header {
       text-align: center;
       padding: 32px 16px;
+      padding-top: calc(32px + var(--safe-area-inset-top));
       border-bottom: 1px solid var(--border-color);
     }
 
@@ -593,6 +644,7 @@
     .footer {
       text-align: center;
       padding: 24px 16px;
+      padding-bottom: calc(100px + var(--safe-area-inset-bottom));
       margin-top: 32px;
       border-top: 1px solid var(--border-color);
     }
@@ -612,8 +664,9 @@
     .menu-container {
       max-width: 1200px;
       margin: 0 auto;
-      padding: 32px 16px;
-      padding-bottom: 224px;
+      padding: 24px 16px;
+      padding-left: calc(16px + var(--safe-area-inset-left));
+      padding-right: calc(16px + var(--safe-area-inset-right));
     }
 
     .menu-grid {
@@ -629,18 +682,29 @@
       }
 
       .cart-sidebar {
+        top: 0;
+        left: auto;
+        right: 0;
         width: 0;
+        max-height: 100%;
         height: 100%;
         border-left: 1px solid var(--border-color);
         border-top: none;
+        border-radius: 0;
+        transition: width var(--transition-speed) ease;
+      }
+
+      .cart-sidebar::before {
+        display: none;
       }
 
       .cart-sidebar.open {
-        width: 320px;
+        width: 360px;
+        max-height: 100%;
       }
 
-      .menu-container {
-        padding-bottom: 32px;
+      .footer {
+        padding-bottom: 24px;
       }
     }
 
@@ -705,11 +769,80 @@
       .modal-actions .btn {
         width: 100%;
         min-width: auto;
+        padding: 14px 16px;
       }
 
       .header-title {
-        font-size: 2rem;
+        font-size: 1.75rem;
       }
+
+      .header-subtitle {
+        font-size: 0.75rem;
+        letter-spacing: 0.2em;
+      }
+
+      .menu-item {
+        padding: 12px;
+      }
+
+      .menu-item-image {
+        height: 160px;
+      }
+
+      .menu-item-title {
+        font-size: 1.1rem;
+      }
+
+      .menu-item-description {
+        font-size: 0.8rem;
+        margin-bottom: 12px;
+      }
+
+      .price-tag {
+        font-size: 1rem;
+      }
+
+      .btn {
+        padding: 10px 14px;
+      }
+    }
+
+    /* Extra small screens */
+    @media (max-width: 360px) {
+      .menu-item-footer {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+      }
+
+      .menu-item-footer .btn {
+        width: 100%;
+      }
+    }
+
+    /* Landscape orientation adjustments */
+    @media (max-height: 500px) and (orientation: landscape) {
+      .cart-sidebar.open {
+        max-height: 100vh;
+      }
+      
+      .modal-content {
+        max-height: 95vh;
+      }
+    }
+
+    /* Smooth scrolling */
+    @media (prefers-reduced-motion: no-preference) {
+      html {
+        scroll-behavior: smooth;
+      }
+    }
+
+    /* Hide number input spinners */
+    .quantity-input::-webkit-outer-spin-button,
+    .quantity-input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
     }
   </style>
 </head>
