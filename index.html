@@ -905,6 +905,20 @@
       transform: translateY(-2px);
     }
 
+    .location-info-link {
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .location-info-link:hover {
+      background: var(--primary-color);
+    }
+
+    .location-info-link:hover strong,
+    .location-info-link:hover p {
+      color: var(--text-primary);
+    }
+
     .location-icon {
       font-size: 1.5rem;
       flex-shrink: 0;
@@ -1006,23 +1020,16 @@
             <span class="location-icon">📍</span>
             <div>
               <strong>Alamat</strong>
-              <p>Hans Bakery - Kunjungi kami untuk roti segar setiap hari!</p>
+              <p>Desa Todanan RT/RW 002/002 (sebelah timur istana ayam)</p>
             </div>
           </div>
-          <div class="location-info-item">
-            <span class="location-icon">🕐</span>
-            <div>
-              <strong>Jam Buka</strong>
-              <p>Senin - Minggu: 07:00 - 21:00</p>
-            </div>
-          </div>
-          <div class="location-info-item">
+          <a href="https://wa.me/6281229900296" target="_blank" rel="noopener noreferrer" class="location-info-item location-info-link">
             <span class="location-icon">📞</span>
             <div>
               <strong>Kontak</strong>
               <p>WhatsApp: 0812-2990-0296</p>
             </div>
-          </div>
+          </a>
         </div>
         <div class="location-map">
           <iframe 
